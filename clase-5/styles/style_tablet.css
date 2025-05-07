@@ -1,0 +1,65 @@
+/*  ----- HEADER -----  */
+.header-redirects {
+    text-align: center;
+    width: 100%;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+}
+
+.logo {
+    width: 75%;
+}
+
+.header-categories ul {
+    padding: 0 5%;
+}
+
+/*  ----- SECTION -----  */
+.new {
+    width: 90%;
+    margin: 0 5%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.new .new-image img {
+    width: 100%;
+}
+
+.new .new-information .information-social-media {
+    padding: 0;
+}
+
+.interest {
+    width: 90%;
+    margin-top: 40px;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 0;
+}
+
+.interest .interest-categories {
+    padding-left: 5px;
+}
+
+/*  ----- FOOTER -----  */
+.footer-box {
+    width: 90%;
+    margin-top: 40px;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 20px;
+    padding: 30px 5px;
+}
+
+.footer-box .footer-information ul {
+    padding-left: 10px;
+    gap: 2.5rem;
+}
+
+.footer-box .footer-information ul li {
+    margin-top: 10px;
+}
