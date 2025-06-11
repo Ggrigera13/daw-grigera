@@ -112,6 +112,40 @@ function validateEmptyFields() {
   return emptyFields;
 }
 
+function validateSingleField(field) {
+  console.log(field.srcElement.labels[0].innerText)
+  var fieldToValidate = document.getElementById(field.target.id)
+  var fieldToValidateValue = fieldToValidate.value;
+  var fieldToValidateLabel = field.srcElement.labels[0].innerText;
+  var fieldToValidateError = document.getElementById(`${field.target.name}-error`);
+
+  if (fieldToValidateValue == null || fieldToValidateValue == "") {
+    fieldToValidateError.textContent = `El campo ${fieldToValidateLabel} no puede estar vacío`;
+    fieldToValidateError.classList.add("error-active");
+    fieldToValidate.classList.add("field-error");
+  } else {
+    var fieldToValidateKey = `${toCamelCase(field.target.name)}Field`
+
+    var fieldToValidationResult = fieldValidators[fieldToValidateKey](fieldToValidateValue);
+
+    if (fieldToValidationResult !== "") {
+      fieldToValidateError.textContent = fieldToValidationResult;
+      fieldToValidateError.classList.add("error-active");
+    } else {
+      fieldToValidate.classList.remove("field-error");
+    }
+  }
+}
+
+function toCamelCase(str) {
+  return str.toLowerCase().split("-").map((word, index) => {
+    if (index === 0) {
+      return word;
+    }
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join('');
+}
+
 for (let key in fields) {
   var field = fields[key];
   field.addEventListener("focus", () => {
@@ -121,8 +155,8 @@ for (let key in fields) {
     field.classList.add("field-not-error");
   });
 
-  field.addEventListener("blur", () => {
-    validateFields(false);
+  field.addEventListener("blur", (event) => {
+    validateSingleField(event);
   });
 }
 
