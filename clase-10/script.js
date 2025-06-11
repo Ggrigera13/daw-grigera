@@ -1,5 +1,9 @@
 var form = document.getElementById("subscription-form");
 var title = document.getElementById("form-title");
+var modal = document.getElementById("subscription-modal");
+var modalMessage = document.getElementById("modal-message");
+var closeModal = document.getElementById("modal-close");
+
 var alertMessages = [];
 
 var fields = {
@@ -113,7 +117,6 @@ function validateEmptyFields() {
 }
 
 function validateSingleField(field) {
-  console.log(field.srcElement.labels[0].innerText)
   var fieldToValidate = document.getElementById(field.target.id)
   var fieldToValidateValue = fieldToValidate.value;
   var fieldToValidateLabel = field.srcElement.labels[0].innerText;
@@ -146,6 +149,53 @@ function toCamelCase(str) {
   }).join('');
 }
 
+function showModal(message) {
+  modalMessage.innerHTML = message;
+  modal.classList.remove("hidden");
+}
+
+function hideModal() {
+  modal.classList.add("hidden");
+}
+
+function getFormData() {
+  var formData = {};
+  var formElements = new FormData(form);
+
+  for (var [formFieldName, formFieldValue] of formElements.entries()) {
+    formData[formFieldName] = formFieldValue;
+  }
+  
+  return formData;
+}
+
+function sendFormData(formData) {
+  var url = new URL("https://jsonplaceholder.typicode.com/posts");
+
+  for (var [key, value] of Object.entries(formData)) {
+    url.searchParams.append(key, value);
+  }
+
+  fetch(url.toString(), { method: "GET" })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+
+      return response.json();
+    })
+    .then(json => {
+      showModal(
+        `<h2>¡Suscripción exitosa!</h2><pre>${JSON.stringify(formData, null, 2)}</pre>`
+      );
+
+      localStorage.setItem("formData", JSON.stringify(formData));
+    })
+    .catch(error => {
+      showModal(`<h2>Error en la suscripción</h2><p>${error.message}</p>`);
+    });
+}
+
 for (let key in fields) {
   var field = fields[key];
   field.addEventListener("focus", () => {
@@ -168,13 +218,42 @@ form.addEventListener("submit", (e) => {
   validateFields(true);
 
   if (alertMessages.length === 0) {
-    var fieldsInfo = "Datos ingresados:\n\n";
-    for (let key in fields) {
-      fieldsInfo += `${fieldLabels[key]}: ${fields[key].value}\n`;
-    }
+    var formData = getFormData();
+    sendFormData(formData);
 
-    alert(fieldsInfo);
     form.reset();
     title.textContent = "HOLA";
+
+    // ----- OLD FUNCTIONALITY -----
+    // var fieldsInfo = "Datos ingresados:\n\n";
+    // for (let key in fields) {
+    //   fieldsInfo += `${fieldLabels[key]}: ${fields[key].value}\n`;
+    // }
+
+    // alert(fieldsInfo);
+    // form.reset();
+    // title.textContent = "HOLA";
   }
 });
+
+closeModal.addEventListener("click", hideModal);
+
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    hideModal();
+  }
+});
+
+window.onload = () => {
+  var dataSaved = localStorage.getItem("formData");
+  if (dataSaved) {
+    var data = JSON.parse(dataSaved);
+    Object.keys(data).forEach(key => {
+      var asddd = document.getElementById(`${key}`);
+      var formField = document.querySelector(`[name="${key}"]`);
+      if (formField) {
+        formField.value = data[key];
+      }
+    });
+  }
+};

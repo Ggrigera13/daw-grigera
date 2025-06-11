@@ -42,6 +42,10 @@
         margin: 20px auto 0;
     }
 
+    .subscription-modal-container {
+        width: 500px;
+    }
+
     .new-principal {
         flex-direction: row;
     }
