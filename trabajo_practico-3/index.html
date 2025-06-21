@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Rick and Morty API</title>
+        <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="styles/styles-desktop.css">
+    </head>
+    <body>
+        <header class="header">
+            <h1>Rick and Morty - Personajes</h1>
+        </header>
+
+        <section class="filters">
+            <h2>Filtrar Personajes</h2>
+            <form id="filterForm" class="filter-form">
+                <input type="text" id="name" placeholder="Nombre">
+                
+                <select id="status">
+                    <option value="">Estado</option>
+                    <option value="alive">Vivo</option>
+                    <option value="dead">Muerto</option>
+                    <option value="unknown">Desconocido</option>
+                </select>
+                
+                <input type="text" id="species" placeholder="Especie">
+                <input type="text" id="type" placeholder="Tipo">
+                
+                <select id="gender">
+                    <option value="">Género</option>
+                    <option value="female">Femenino</option>
+                    <option value="male">Masculino</option>
+                    <option value="genderless">Sin Género</option>
+                    <option value="unknown">Desconocido</option>
+                </select>
+                
+                <button type="submit">Buscar</button>
+                <button type="reset">Limpiar Filtros</button>
+                <button id="getAllButton">Obtener Todos los Personajes</button>
+            </form>
+        </section>
+
+        <section id="error" class="error"></section>
+
+        <section id="results" class="results"></section>
+
+        <script src="script.js"></script>
+    </body>
+</html>

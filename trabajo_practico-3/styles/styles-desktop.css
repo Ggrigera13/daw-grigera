@@ -1,0 +1,42 @@
+ @media (min-width: 1080px) {
+    .header {
+        height: 20vh;
+    }
+
+    .header h1 {
+        font-size: 30px;
+        padding-top: 80px;
+    }
+
+    .filters h2 {
+        font-size: 20px;
+    }
+
+    .filter-form {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+    }
+
+    input, select, button {
+        display: inline-block;
+        width: auto;
+        margin-right: 10px;
+        vertical-align: middle;
+        font-size: 14px;
+    }
+
+    .results {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .character-card h3 {
+        font-size: 18px;
+    }
+
+    .error {
+        font-size: 20px;
+    }
+}
