@@ -100,3 +100,30 @@ button:hover {
     margin-bottom: 10px;
     font-size: 35px;
 }
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 5px;
+}
+  
+  
+.pagination button {
+    padding: 5px 10px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+}
+  
+.pagination button:disabled {
+    background-color: #ae3323;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: default;
+}
+
