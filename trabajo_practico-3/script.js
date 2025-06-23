@@ -3,8 +3,11 @@ var API_URL = 'https://rickandmortyapi.com/api/character';
 var getAllButton = document.getElementById('getAllButton');
 var resultsSection = document.getElementById('results');
 var errorSection = document.getElementById('error');
+var paginationSection = document.getElementById('pagination');
 
 var filterForm = document.getElementById('filterForm');
+
+var lastQuery = '';
 
 var genderDictionary = {
     'Female': 'Femenino',
@@ -29,17 +32,18 @@ filterForm.addEventListener('submit', (e) => {
     var gender = document.getElementById('gender').value;
   
     var query = new URLSearchParams({ name, status, species, type, gender });
-    fetchCharacters(`${API_URL}/?${query.toString()}`);
+    getCharacters(`${API_URL}/?${query.toString()}`);
 });
 
 getAllButton.addEventListener('click', () => {
     filterForm.reset();
-    fetchCharacters(API_URL);
+    getCharacters(API_URL);
 });
 
-async function fetchCharacters(url) {
+async function getCharacters(url, saveQuery = true) {
     resultsSection.innerHTML = '';
     errorSection.textContent = '';
+    paginationSection.innerHTML = '';
 
     try {
         var response = await fetch(url);
@@ -49,13 +53,21 @@ async function fetchCharacters(url) {
         }
 
         var data = await response.json();
-        renderCharacters(data.results);
+        displayCharacters(data.results);
+
+        if (saveQuery) {
+            var generatedUrl = new URL(url);
+            generatedUrl.searchParams.delete('page');
+            lastQuery = `${generatedUrl.origin}${generatedUrl.pathname}?${generatedUrl.searchParams.toString()}`;
+        }
+
+        displayPagination(data.info);
     } catch (error) {
         errorSection.textContent = error.message;
     }
 }
 
-function renderCharacters(characters) {
+function displayCharacters(characters) {
     if (!characters || characters.length === 0) {
         resultsSection.innerHTML = '<p>No se encontraron personajes.</p>';
         return;
@@ -81,4 +93,37 @@ function getGenderName(gender) {
 
 function getStatusName(status) {
     return statusDictionary[status];
+}
+
+function displayPagination(info) {
+    if (!info || info.pages <= 1) {
+        return;
+    }
+
+    var currentPage = getPageFromUrl(info.next, info.prev);
+    var totalPages = info.pages;
+
+    for (let i = 1; i <= totalPages; i++) {
+        var createdButton = document.createElement('button');
+        createdButton.textContent = i;
+        createdButton.disabled = i === currentPage;
+
+        createdButton.addEventListener('click', () => {
+            getCharacters(`${lastQuery}&page=${i}`, false);
+        });
+
+        paginationSection.appendChild(createdButton);
+    }
+}
+
+function getPageFromUrl(next, prev) {
+    if (prev) {
+        var url = new URL(prev);
+        return parseInt(url.searchParams.get('page')) + 1;
+    } else if (next) {
+        var url = new URL(next);
+        return parseInt(url.searchParams.get('page')) - 1;
+    }
+
+    return 1;
 }
